@@ -1,0 +1,32 @@
+
+
+.header_container{
+
+    .navbar{
+        width: 100%;
+       
+        margin-bottom: 5rem;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .nav_list{
+        height: 5rem;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        list-style: none;
+    }
+
+    .item{
+       margin-right: 3rem;
+       font-weight: 600;
+       border-radius: 1rem;
+       padding: 2rem;
+       text-transform: uppercase;
+
+       :hover{
+        border-bottom: 1px solid red;
+        }
+    }
+
+}
