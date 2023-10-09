@@ -1,62 +1,84 @@
  
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCardContext } from '../Context/Store';
 import style from './shop.module.scss'
 
 
 const ShopCard = () => {
-  const { selecteditem, setSelectedItem } = useCardContext();
+ let { selecteditem, setSelectedItem } = useCardContext();
+ const[prodprice,setProdPrice]=useState(); 
+ const [isButtonDisabled, setButtonDisabled] = useState(false);
+
+  const handleTotalPrice=()=>{
+    let ans=0;
+    selecteditem.map(item=>{
+      ans+=item.count*item.price;
+    })
+    setProdPrice(ans);
+  }
+
+  useEffect(()=>{
+    handleTotalPrice();
+  },[selecteditem])
+
+  const addItemCount = (id) => {
+   const incresedAmount=selecteditem.map(item=>{
+      if(item.id===id){
+        return {...item,count:item.count+1}
+      }
+      return item;
+    }) 
+      setSelectedItem(incresedAmount);    
+  }; 
+
+  const removeItemCount = (id) => {
+    const incresedAmount=selecteditem.map(item=>{
+      if(item.id===id){
+        let removeIndividualItem=item.count>1?item.count-1:1;
+
+        item.count<1?setButtonDisabled(true):setButtonDisabled(false);
+        
+        return {...item,count:removeIndividualItem}
+      }
+      return item;
+    }) 
+      setSelectedItem(incresedAmount); 
+  };
+
+  const removeItem=(id)=>{
+    let arr=selecteditem.filter(item=>item.id!==id);
+    setSelectedItem(arr);
+  }
   
-
-  // const[count,setCount]=useState(1); 
-
-   const countState = selecteditem.map(item => ({
-      ...item,
-      "count":1, 
-    }));
-
-  const clickOn = (id) => {
-    // addPropertyToItems();
-    let mycount=selecteditem.find(item=>item.id===id);
-    setSelectedItem([...selecteditem,...countState]);
-    console.log(mycount,'mycount');
-    console.log(selecteditem,'selected')
-  };
-
-  const deleted = () => {
-    // count<=1?setCount(1):setCount(count-1);
-    setSelectedItem((e)=>e.slice(0,-1));
-  };
-
   return (
     <>
-      <h2>Shopping cart</h2>
+      <h2 className={style['selectedcart-title']}>Your Shopping Cart</h2>
 
       {
         selecteditem.map((item,i)=>{
-          // const{title,image,price}=item;
+          const{id,title,price,count}=item;
           return(
-            <React.Fragment key={i}>
+            <React.Fragment key={id}>
               <div className={style['selected-item']}>
 
-              <h2 className={style['item-title']} >{item.title}</h2>
-              <p  className={style['item-price']}>{item.price}</p>
+              <h2 className={style['item-title']} >{title}</h2>
+              <p  className={style['item-price']}>{price}</p>
               <div className={style['item-count']}>
-                <button onClick={deleted}>-</button>
-                <p>{item.count}</p>
-                <button onClick={()=>clickOn(item.id)}>+</button>
+                <button disabled={isButtonDisabled} onClick={()=>removeItemCount(id)}>-</button>
+                <p>{count}</p>
+                <button onClick={()=> addItemCount(id)}>+</button>
               </div>
-              {/* <p >item price:{itemPrice}</p> */}
+              <p >item price:{price*count}</p>
+              <button onClick={()=>removeItem(id)}>Remove</button>
               </div>
             </React.Fragment>
-            
           )
         })
       }
 
-      <p> Total of all Element :  </p>
+      <p> Total of all Products : {prodprice} </p>
       
     </>
   );

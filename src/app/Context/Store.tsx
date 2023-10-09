@@ -8,7 +8,7 @@ type CardProviderProps={
   children:React.ReactNode;
 }
 
-type selectedCard = {
+export type selectedCard = {
   count:number;
   category:string;
   title:string
