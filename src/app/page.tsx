@@ -53,7 +53,7 @@ export default function Home() {
       {warning && (
         <div className={`${style["cart-warning"]}`}>
           <h3 className={style["warning-heading"]}>
-            "Already you have added this Product."
+            Already you have added this Product.
           </h3>
         </div>
       )} 
