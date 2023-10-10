@@ -1,11 +1,108 @@
-.selectedcart-title{
-   display: inline-block;
-   margin-top: -2rem;
-   margin-bottom: 2rem;
-   font-size: 1.2rem;
-   padding-bottom: 0.5rem;
-   border-bottom:1px solid rgb(206, 86, 86); ;
-   color: rgb(206, 86, 86);
-   text-transform: uppercase;
-   letter-spacing: 1px;
+.selectedcart-title {
+  display: inline-block;
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgb(206, 86, 86);
+  color: rgb(206, 86, 86);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.empty-cart {
+  width: 100%;
+  height: 6rem;
+  background-color: rgb(255, 234, 234);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .empty-cart-title {
+    color: rgb(206, 86, 86);
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}
+
+.total-price{
+   width: 50%;
+   height: 6rem;
+   display: flex;
+   justify-content: start;
+   align-items: center;
+
+  .total-item-price{
+    color: rgb(206, 86, 86);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+}
+
+.selected-cart {
+  padding: 1rem 2rem;
+  height: 22rem;
+  overflow-y: scroll;
+  background-color: rgb(255, 245, 245);
+  .selected-item {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgb(206, 86, 86);
+    padding-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .item-title {
+      width: 20rem;
+      color: rgb(206, 86, 86);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.2rem;
+    }
+
+    .item-count {
+      width: 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+
+      .count-button {
+        padding: 0.2rem 0.5rem;
+        border-radius: 5px;
+      }
+      .green {
+        color: green;
+        border: 1px solid green;
+      }
+      .red {
+        color: rgb(206, 86, 86);
+        border: 1px solid rgb(206, 86, 86);
+      }
+
+      .count {
+        padding: 0.2rem 0.5rem;
+      }
+    }
+
+    .count-price {
+      width: 4rem;
+    }
+
+    .remove-item {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      background-color: rgb(206, 86, 86);
+      color: white;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      border: none;
+      border-radius: 0.3rem;
+    }
+  }
 }

@@ -1,91 +1,112 @@
- 
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useCardContext } from '../Context/Store';
-import style from './shop.module.scss'
-
+import React, { useEffect, useState } from "react";
+import { useCardContext } from "../Context/Store";
+import style from "./shop.module.scss";
+import Image from "next/image";
 
 const ShopCard = () => {
-  const {state:{selecteditem},Dispatch } = useCardContext();
+  const {
+    state: { selecteditem },
+    Dispatch,
+  } = useCardContext();
 
- const[prodprice,setProdPrice]=useState(); 
+  const [prodprice, setProdPrice] = useState();
+  const[countItem,setCountItem]=useState(0);
 
-  const handleTotalPrice=()=>{
-    let ans=0;
-    selecteditem.map(item=>{
-      ans+=item.count*item.price;
-    })
-    setProdPrice(ans);
+  const handleTotalPrice = () => {
+    let ans = 0;
+    selecteditem.map((item) => {
+      ans += item.count * item.price;
+    });
+    setProdPrice(ans.toFixed(2));
+  };
+
+  const handleTotalCount = ()=>{
+    const totalCount = selecteditem.reduce((accumulator, currentItem) => {
+      return accumulator + currentItem.count;
+    }, 0);
+    setCountItem(totalCount);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
+    handleTotalCount();
     handleTotalPrice();
-  },[selecteditem])
+  }, [selecteditem]);
 
-  // const addItemCount = (id) => {
-  //  const incresedAmount=selecteditem.map(item=>{
-  //     if(item.id===id){
-  //       return {...item,count:item.count+1}
-  //     }
-  //     return item;
-  //   }) 
-  //     setSelectedItem(incresedAmount);    
-  // }; 
 
-  // const removeItemCount = (id) => {
-  //   const incresedAmount=selecteditem.map(item=>{
-  //     if(item.id===id){
-  //       let removeIndividualItem=item.count>1?item.count-1:1;
+  const EmptyCart=()=>{
+    return(
+       <div className={style['empty-cart']}>
+         <h2 className={style['empty-cart-title']}>cart is empty.</h2>
+       </div>
+    )
+  }
 
-  //       item.count<1?setButtonDisabled(true):setButtonDisabled(false);
-        
-  //       return {...item,count:removeIndividualItem}
-  //     }
-  //     return item;
-  //   }) 
-  //     setSelectedItem(incresedAmount); 
-  // };
-
-  // const removeItem=(id)=>{
-  //   let arr=selecteditem.filter(item=>item.id!==id);
-  //   setSelectedItem(arr);
-    
-  // }
-  
   return (
     <>
-      <h2 className={style['selectedcart-title']}>Your Shopping Cart</h2>
+      <div className="container">
+        <h2 className={style["selectedcart-title"]}>Your Shopping Cart</h2>
+        <div className={style['total-price']}>
+          <p className={style['total-item-price']}>total count of all products : {countItem}</p>
+          <p className={style['total-item-price']}> Total prize of all Products : {prodprice} </p>
+        </div>
 
-      {
-        selecteditem.map((item,i)=>{
-          const{id,title,price,count}=item;
-          return(
-            <React.Fragment key={id}>
-              <div className={style['selected-item']}>
+        {
+          selecteditem.length>0?
+          <div className={style["selected-cart"]}>
+            {selecteditem.map((item, i) => {
+              const { image, id, title, price, count } = item;
+              return (
+                <React.Fragment key={id}>
+                  <div className={` ${style["selected-item"]}`}>
+                    <div className={style["indi-image"]}>
+                      <Image src={image} alt={title} width={70} height={40} />
+                    </div>
+                    <h2 className={style["item-title"]}>{title}</h2>
 
-              <h2 className={style['item-title']} >{title}</h2>
-              <p  className={style['item-price']}>{price}</p>
-              <div className={style['item-count']}>
+                    <div className={style["item-count"]}>
+                      {/* <button disabled={isButtonDisabled} onClick={()=>removeItemCount(id)}>-</button> */}
+                      <button
+                        className={`${style["red"]} ${style["count-button"]}`}
+                        onClick={() =>
+                          Dispatch({ type: "REMOVE_COUNT_CART", payload: id })
+                        }
+                      >
+                        -
+                      </button>
 
-                {/* <button disabled={isButtonDisabled} onClick={()=>removeItemCount(id)}>-</button> */}
-                <button onClick={()=>Dispatch({type:"REMOVE_COUNT_CART",payload:id})}>-</button>
+                      <p className={style["count"]}>{count}</p>
+                      {/* <button onClick={()=> addItemCount(id)}>+</button> */}
+                      <button
+                        className={`${style["green"]} ${style["count-button"]}`}
+                        onClick={() =>
+                          Dispatch({ type: "ADD_COUNT_CART", payload: id })
+                        }
+                      >
+                        +
+                      </button>
+                    </div>
+                    <p className={style["count-price"]}>
+                      ${(price * count).toFixed(2)}
+                    </p>
+                    {/* <button onClick={()=>removeItem(id)}>Remove</button> */}
+                    <button
+                      className={style["remove-item"]}
+                      onClick={() =>
+                        Dispatch({ type: "REMOVE_ITEM_FROM_CART", payload: id })
+                      }
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>: <EmptyCart/>
+        }
 
-                <p>{count}</p>
-                {/* <button onClick={()=> addItemCount(id)}>+</button> */}
-                <button onClick={()=>Dispatch({type:"ADD_COUNT_CART",payload:id})}>+</button>
-              </div>
-              <p >item price:{price*count}</p>
-              {/* <button onClick={()=>removeItem(id)}>Remove</button> */}
-              <button onClick={()=>Dispatch({type:"REMOVE_ITEM_FROM_CART",payload:id})}>Remove</button>
-              </div>
-            </React.Fragment>
-          )
-        })
-      }
-
-      <p> Total of all Products : {prodprice} </p>
-      
+      </div>
     </>
   );
 };

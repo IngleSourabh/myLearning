@@ -62,28 +62,15 @@ type CardProviderProps={
   children:React.ReactNode;
 }
 
-export type selectedCard = {
-  count?:number;
-  category:string;
-  title:string
-  description:string;
-  id:number;
-  image: string;
-  price:number;
-}[]
-
-type CardList={
-  selecteditem:selectedCard[];
-  setSelectedItem:React.Dispatch<React.SetStateAction<selectedCard[]>>;
-}
 const initialState={
-   selecteditem:[]
+   selecteditem:[],
 }
 
   export const UserContext=createContext<any | []>([]);
 
   export const CardProvider=({children}:CardProviderProps)=>{
     const [state,Dispatch]=useReducer(cartRerducer,initialState);
+    
     return(
       <UserContext.Provider
       value={{
